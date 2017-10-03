@@ -2,9 +2,11 @@ package cs271.lab.list;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
@@ -17,7 +19,7 @@ public class TestList {
 
   @Before
   public void setUp() throws Exception {
-    list = new ArrayList<Integer>();
+    list = new LinkedList<Integer>();
     // TODO also try with a LinkedList - does it make any difference?
   }
 
@@ -39,11 +41,11 @@ public class TestList {
 
   @Test
   public void testSizeNonEmpty() {
-    // TODO fix the expected values in the assertions below
+    // DONE fix the expected values in the assertions below
     list.add(77);
-    assertEquals(true, list.isEmpty());
-    assertEquals(0, list.size());
-    assertEquals(0, list.get(0).intValue());
+    assertEquals(false, list.isEmpty());
+    assertEquals(1, list.size());
+    assertEquals(77, list.get(0).intValue());
   }
 
   @Test
@@ -51,7 +53,9 @@ public class TestList {
     // TODO write assertions using
     // list.contains(77)
     // that hold before and after adding 77 to the list
-    fail("Not yet implemented"); // remove this line when done
+    assertFalse(list.contains(77));
+    list.add(77);
+    assertTrue(list.contains(77));
   }
 
   @Test
@@ -59,11 +63,11 @@ public class TestList {
     list.add(77);
     list.add(77);
     list.add(77);
-    // TODO fix the expected values in the assertions below
-    assertEquals(0, list.size());
+    // DONE fix the expected values in the assertions below
+    assertEquals(3, list.size());
     assertEquals(0, list.indexOf(77));
-    assertEquals(0, list.get(1).intValue());
-    assertEquals(0, list.lastIndexOf(77));
+    assertEquals(77, list.get(1).intValue());
+    assertEquals(2, list.lastIndexOf(77));
   }
 
   @Test
@@ -75,13 +79,13 @@ public class TestList {
     list.add(55);
     list.add(77);
     list.add(66);
-    // TODO fix the expected values in the assertions below
-    assertEquals(0, list.size());
-    assertEquals(0, list.indexOf(77));
-    assertEquals(0, list.lastIndexOf(77));
-    assertEquals(0, list.get(2).intValue());
-    assertEquals(0, list.get(3).intValue());
-    assertEquals(Arrays.asList(33, 77, 44), list);
+    // DONE fix the expected values in the assertions below
+    assertEquals(7, list.size());
+    assertEquals(1, list.indexOf(77));
+    assertEquals(5, list.lastIndexOf(77));
+    assertEquals(44, list.get(2).intValue());
+    assertEquals(77, list.get(3).intValue());
+    assertEquals(Arrays.asList(33, 77, 44, 77, 55, 77, 66), list);
   }
 
   @Test
@@ -90,22 +94,22 @@ public class TestList {
     list.add(77);
     list.add(4);
     list.add(77);
-    list.add(5);
-    list.add(77);
+    list.add(5); // removed
+    list.add(77); //removed
     list.add(6);
     list.remove(5); // what does this method do?
     // TODO fix the expected values in the assertions below
-    assertEquals(0, list.size());
-    assertEquals(0, list.indexOf(77));
-    assertEquals(0, list.lastIndexOf(77));
-    assertEquals(0, list.get(2).intValue());
-    assertEquals(0, list.get(3).intValue());
+    assertEquals(6, list.size());
+    assertEquals(1, list.indexOf(77));
+    assertEquals(3, list.lastIndexOf(77));
+    assertEquals(4, list.get(2).intValue());
+    assertEquals(77, list.get(3).intValue());
     list.remove(Integer.valueOf(5)); // what does this one do?
-    assertEquals(0, list.size());
-    assertEquals(0, list.indexOf(77));
-    assertEquals(0, list.lastIndexOf(77));
-    assertEquals(0, list.get(2).intValue());
-    assertEquals(0, list.get(3).intValue());
+    assertEquals(5, list.size());
+    assertEquals(1, list.indexOf(77));
+    assertEquals(3, list.lastIndexOf(77));
+    assertEquals(4, list.get(2).intValue());
+    assertEquals(77, list.get(3).intValue());
   }
 
   @Test
@@ -117,17 +121,19 @@ public class TestList {
     list.add(55);
     list.add(77);
     list.add(66);
-    // TODO using containsAll and Arrays.asList (see above),
+    // DONE using containsAll and Arrays.asList (see above),
     // 1) assert that list contains all five different numbers added
+    assertTrue(list.containsAll(Arrays.asList(33, 77, 44, 77, 55, 77, 66)));
     // 2) assert that list does not contain all of 11, 22, and 33
-    fail("Not yet implemented"); // remove this line when done
+    assertFalse(list.containsAll(Arrays.asList(11, 22, 33)));
   }
 
   @Test
   public void testAddAll() {
-    // TODO in a single statement using addAll and Arrays.asList,
+    // DONE in a single statement using addAll and Arrays.asList,
     // add items to the list to make the following assertions pass
     // (without touching the assertions themselves)
+    list.addAll(Arrays.asList(33, 77, 44, 77, 55, 77, 66));
     assertEquals(7, list.size());
     assertEquals(33, list.get(0).intValue());
     assertEquals(77, list.get(1).intValue());
@@ -150,6 +156,7 @@ public class TestList {
     // TODO in a single statement using removeAll and Arrays.asList,
     // remove items from the list to make the following assertions pass
     // (without touching the assertions themselves)
+    list.removeAll(Arrays.asList(33, 44, 55, 66));
     assertEquals(3, list.size());
     assertEquals(Arrays.asList(77, 77, 77), list);
   }
@@ -166,6 +173,7 @@ public class TestList {
     // TODO in a single statement using retainAll and Arrays.asList,
     // remove items from the list to make the following assertions pass
     // (without touching the assertions themselves)
+    list.retainAll(Arrays.asList(77));
     assertEquals(3, list.size());
     assertEquals(Arrays.asList(77, 77, 77), list);
   }
@@ -182,6 +190,9 @@ public class TestList {
     // TODO use the set method to change specific elements in the list
     // such that the following assertions pass
     // (without touching the assertions themselves)
+    list.set(1, 99);
+    list.set(3, 99);
+    list.set(5, 99);
     assertEquals(7, list.size());
     assertEquals(33, list.get(0).intValue());
     assertEquals(99, list.get(1).intValue());
@@ -203,6 +214,6 @@ public class TestList {
     list.add(66);
     // TODO fix the arguments in the subList method so that the assertion
     // passes
-    assertEquals(Arrays.asList(44, 77, 55), list.subList(0, 0));
+    assertEquals(Arrays.asList(44, 77, 55), list.subList(2, 5));
   }
 }
